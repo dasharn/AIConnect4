@@ -1,4 +1,4 @@
-# Connect Four Game
+# AI Connect Four Game
 
 This is a simple implementation of the Connect Four game using Tkinter in Python.
 
