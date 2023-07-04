@@ -30,11 +30,17 @@ class ConnectFourGame:
         # This method is called when the player makes a move by clicking on the game board.
         # It determines the column where the player clicked and updates the game board accordingly.
         # Then it checks if the player has won or if it's a draw, and takes appropriate actions.
+        # Get the column based on the mouse click position
         column = event.x // 80
+
+        # Find the next available row in the selected column
         for row in range(HEIGHT - 1, -1, -1):
             if self.game_board[row][column] == ' ':
+                # Make the move for player 1
                 self.game_board[row][column] = PLAYER_1
                 self.draw_board()
+
+                # Check for a winning condition or draw
                 if self.check_winner(row, column, PLAYER_1):
                     messagebox.showinfo("Game Over", "Player 1 wins!")
                     self.reset_game()
@@ -43,6 +49,8 @@ class ConnectFourGame:
                     messagebox.showinfo("Game Over", "It's a draw!")
                     self.reset_game()
                     return
+
+                # AI makes its move
                 self.ai_move()
                 return
 
@@ -55,27 +63,31 @@ class ConnectFourGame:
         best_score = float('-inf')
         best_move = None
 
+        # Iterate over each column and find the best move for the AI player
         for col in range(WIDTH):
             if self.is_valid_move(col):
                 row = self.get_next_row(col)
                 self.game_board[row][col] = PLAYER_2
 
+                # Use the minimax algorithm to determine the score of the move
                 score = self.minimax(self.game_board, 4, float('-inf'), float('inf'), False)
 
+                # Undo the move
                 self.game_board[row][col] = ' '
 
                 if score > best_score:
                     best_score = score
                     best_move = col
 
+        # Make the best move for the AI player
         self.game_board[self.get_next_row(best_move)][best_move] = PLAYER_2
         self.draw_board()
 
+        # Check for a winning condition or draw
         if self.check_winner(self.get_next_row(best_move), best_move, PLAYER_2):
             messagebox.showinfo("Game Over", "Player 2 wins!")
             self.reset_game()
             return
-
         if self.check_draw():
             messagebox.showinfo("Game Over", "It's a draw!")
             self.reset_game()
@@ -88,6 +100,11 @@ class ConnectFourGame:
 
     def get_next_row(self, column):
         # This method returns the next available row in the specified column.
+        # Check if the top row of the selected column is empty
+        return self.game_board[0][column] == ' '
+
+    def get_next_row(self, column):
+        # Find the next available row in the selected column
         for row in range(HEIGHT - 1, -1, -1):
             if self.game_board[row][column] == ' ':
                 return row
@@ -96,6 +113,7 @@ class ConnectFourGame:
         # This method implements the minimax algorithm with alpha-beta pruning.
         # It evaluates the best score for the current game state and returns it.
 
+        # Check for a winning condition, losing condition, or draw
         if self.check_winner(None, None, PLAYER_2):
             return 1
         elif self.check_winner(None, None, PLAYER_1):
@@ -103,6 +121,7 @@ class ConnectFourGame:
         elif self.check_draw():
             return 0
 
+        # Base case: reached the maximum depth
         if depth == 0:
             return 0
 
@@ -113,13 +132,17 @@ class ConnectFourGame:
                     row = self.get_next_row(col)
                     board[row][col] = PLAYER_2
 
+                    # Recursively call minimax with the board after making the move
                     score = self.minimax(board, depth - 1, alpha, beta, False)
 
+                    # Undo the move
                     board[row][col] = ' '
 
+                    # Update the best score and alpha value
                     best_score = max(score, best_score)
                     alpha = max(alpha, best_score)
 
+                    # Perform alpha-beta pruning
                     if beta <= alpha:
                         break
             return best_score
@@ -130,13 +153,17 @@ class ConnectFourGame:
                     row = self.get_next_row(col)
                     board[row][col] = PLAYER_1
 
+                    # Recursively call minimax with the board after making the move
                     score = self.minimax(board, depth - 1, alpha, beta, True)
 
+                    # Undo the move
                     board[row][col] = ' '
 
+                    # Update the best score and beta value
                     best_score = min(score, best_score)
                     beta = min(beta, best_score)
 
+                    # Perform alpha-beta pruning
                     if beta <= alpha:
                         break
             return best_score
@@ -145,6 +172,7 @@ class ConnectFourGame:
         # This method checks if the specified player has won the game.
         # If row and col are None, it checks for a win in the entire game board.
 
+        # Check for a winning condition in the entire board or a specific position
         if row is None and col is None:
             for r in range(HEIGHT):
                 for c in range(WIDTH):
@@ -159,6 +187,7 @@ class ConnectFourGame:
         # This method checks if there is a winning line passing through the specified cell.
         # It checks for a win horizontally, vertically, and diagonally.
 
+        # Check for a winning condition horizontally, vertically, and diagonally
         # Check horizontally
         count = 0
         for c in range(WIDTH):
@@ -204,6 +233,7 @@ class ConnectFourGame:
 
     def check_draw(self):
          # This method checks if the game is a draw, i.e., if all cells are filled.
+        # Check if the game is a draw (all positions on the board are filled)
         for row in range(HEIGHT):
             for col in range(WIDTH):
                 if self.game_board[row][col] == ' ':
@@ -213,6 +243,7 @@ class ConnectFourGame:
     def draw_board(self):
          # This method draws the current game board on the canvas.
         # It uses rectangles to represent cells and ovals to represent player's moves.
+        # Draw the game board and the player's moves on the canvas
         self.canvas.delete("all")
         for row in range(HEIGHT):
             for col in range(WIDTH):
@@ -228,6 +259,7 @@ class ConnectFourGame:
 
     def reset_game(self):
          # This method resets the game by clearing the game board and redrawing the initial state.
+        # Reset the game board to its initial state
         for row in range(HEIGHT):
             for col in range(WIDTH):
                 self.game_board[row][col] = ' '
