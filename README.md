@@ -2,6 +2,9 @@
 
 This is a simple implementation of the Connect Four game using Tkinter in Python.
 
+https://github.com/Dasharn/AIConnect4/assets/112700137/f7d99d71-39ef-4045-bf34-48239b781466
+
+
 ## Game Rules
 
 Connect Four is a two-player game where the players take turns dropping colored discs into a grid. The objective is to be the first to form a horizontal, vertical, or diagonal line of four discs of your color.
