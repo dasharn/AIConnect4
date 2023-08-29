@@ -2,7 +2,11 @@
 
 This is a simple implementation of the Connect Four game using Tkinter in Python.
 
-https://github.com/Dasharn/AIConnect4/assets/112700137/f7d99d71-39ef-4045-bf34-48239b781466
+
+https://github.com/Dasharn/AIConnect4/assets/112700137/06757c35-50bf-4f3f-96b2-41fd4c8e4e8f
+
+
+
 
 
 ## Game Rules
